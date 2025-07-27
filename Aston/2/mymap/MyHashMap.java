@@ -1,4 +1,4 @@
-package MyHashMap;
+package mymap;
 
 public class MyHashMap<K, V> {
     private static class Node<K, V>{
@@ -48,6 +48,10 @@ public class MyHashMap<K, V> {
         Node<K, V> newNode = new Node<>(hash, key, value, table[index]);
         table[index] = newNode;
         size++;
+
+        if (size > threshold) {
+            resize();
+        }
     }
 
     public V get(K key) {
@@ -88,7 +92,35 @@ public class MyHashMap<K, V> {
         return null;
     }
 
-    public int size() {
+    @SuppressWarnings("unchecked")
+    private void resize() {
+        int oldCapacity = table.length;
+        int newCapacity = oldCapacity * 2;
+
+        Node<K, V>[] oldTable = table;
+        Node<K, V>[] newTable = (Node<K, V>[]) new Node[newCapacity];
+
+        table = newTable;
+        threshold = (int) (newCapacity * DEFAULT_LOAD_FACTOR);
+        size = 0;
+
+        for (Node<K, V> node : oldTable) {
+            while (node != null) {
+                put(node.key, node.value);
+                node = node.next;
+            }
+        }
+    }
+
+    public int getSize() {
         return size;
+    }
+
+    public int getThreshold() {
+        return threshold;
+    }
+
+    public int getCapacity() {
+        return table.length;
     }
 }
