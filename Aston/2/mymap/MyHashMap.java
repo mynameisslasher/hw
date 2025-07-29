@@ -1,5 +1,7 @@
 package mymap;
 
+import java.util.Objects;
+
 public class MyHashMap<K, V> {
     private static class Node<K, V>{
         final int hash;
@@ -38,7 +40,7 @@ public class MyHashMap<K, V> {
 
         Node<K, V> current = table[index];
         while (current != null) {
-            if (current.hash == hash && current.key.equals(key)) {
+            if (current.hash == hash && (Objects.equals(current.key, key))) {
                 current.value = value;
                 return;
             }
